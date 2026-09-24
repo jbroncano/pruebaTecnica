@@ -1,0 +1,94 @@
+version: "3.8"
+
+services:
+  postgres-personas:
+    image: postgres:16-alpine
+    container_name: postgres-personas
+    environment:
+      POSTGRES_DB: personas_db
+      POSTGRES_USER: personas_user
+      POSTGRES_PASSWORD: personas_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_personas_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U personas_user -d personas_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  postgres-cuentas:
+    image: postgres:16-alpine
+    container_name: postgres-cuentas
+    environment:
+      POSTGRES_DB: cuentas_db
+      POSTGRES_USER: cuentas_user
+      POSTGRES_PASSWORD: cuentas_pass
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_cuentas_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cuentas_user -d cuentas_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  personas-service:
+    build: ./personas-service
+    container_name: personas-service
+    environment:
+      DB_HOST: postgres-personas
+      DB_PORT: 5432
+      DB_NAME: personas_db
+      DB_USER: personas_user
+      DB_PASSWORD: personas_pass
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASSWORD: guest
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres-personas:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  cuentas-service:
+    build: ./cuentas-service
+    container_name: cuentas-service
+    environment:
+      DB_HOST: postgres-cuentas
+      DB_PORT: 5432
+      DB_NAME: cuentas_db
+      DB_USER: cuentas_user
+      DB_PASSWORD: cuentas_pass
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASSWORD: guest
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres-cuentas:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+volumes:
+  postgres_personas_data:
+  postgres_cuentas_data:

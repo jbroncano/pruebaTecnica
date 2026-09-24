@@ -1,0 +1,268 @@
+{
+  "info": {
+    "name": "Prueba Tecnica - Arquitectura Microservicio",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Clientes",
+      "item": [
+        {
+          "name": "Crear cliente - Jose Lema",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "var body = pm.response.json();",
+                  "pm.environment.set('clienteId', body.clienteId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{personasUrl}}/clientes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Jose Lema\",\n  \"genero\": \"M\",\n  \"edad\": 35,\n  \"identificacion\": \"0102030401\",\n  \"direccion\": \"Otavalo sn y principal\",\n  \"telefono\": \"098254785\",\n  \"contrasena\": \"1234\",\n  \"estado\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Crear cliente - Marianela Montalvo",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{personasUrl}}/clientes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Marianela Montalvo\",\n  \"genero\": \"F\",\n  \"edad\": 32,\n  \"identificacion\": \"0102030402\",\n  \"direccion\": \"Amazonas y NNUU\",\n  \"telefono\": \"097548965\",\n  \"contrasena\": \"5678\",\n  \"estado\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Crear cliente - Juan Osorio",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{personasUrl}}/clientes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Osorio\",\n  \"genero\": \"M\",\n  \"edad\": 40,\n  \"identificacion\": \"0102030403\",\n  \"direccion\": \"13 junio y Equinoccial\",\n  \"telefono\": \"098874587\",\n  \"contrasena\": \"1245\",\n  \"estado\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Obtener cliente por id",
+          "request": {
+            "method": "GET",
+            "url": "{{personasUrl}}/clientes/{{clienteId}}"
+          }
+        },
+        {
+          "name": "Listar clientes",
+          "request": {
+            "method": "GET",
+            "url": "{{personasUrl}}/clientes?page=0&size=10"
+          }
+        },
+        {
+          "name": "Actualizar cliente",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{personasUrl}}/clientes/{{clienteId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Jose Lema\",\n  \"genero\": \"M\",\n  \"edad\": 36,\n  \"direccion\": \"Otavalo sn y principal\",\n  \"telefono\": \"098254785\",\n  \"estado\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Crear cliente duplicado (409 esperado)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test('Status 409', () => pm.response.to.have.status(409));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{personasUrl}}/clientes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Jose Lema\",\n  \"genero\": \"M\",\n  \"edad\": 35,\n  \"identificacion\": \"0102030401\",\n  \"direccion\": \"Otavalo sn y principal\",\n  \"telefono\": \"098254785\",\n  \"contrasena\": \"1234\",\n  \"estado\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Eliminar cliente",
+          "request": {
+            "method": "DELETE",
+            "url": "{{personasUrl}}/clientes/{{clienteId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Cuentas",
+      "item": [
+        {
+          "name": "Crear cuenta - Jose Lema (Ahorro 2000)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "var body = pm.response.json();",
+                  "pm.environment.set('cuentaId', body.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{cuentasUrl}}/cuentas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"tipoCuenta\": \"AHORRO\",\n  \"saldoInicial\": 2000,\n  \"estado\": true,\n  \"clienteId\": {{clienteId}}\n}"
+            }
+          }
+        },
+        {
+          "name": "Crear cuenta - Marianela (Corriente 100)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{cuentasUrl}}/cuentas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"225487\",\n  \"tipoCuenta\": \"CORRIENTE\",\n  \"saldoInicial\": 100,\n  \"estado\": true,\n  \"clienteId\": {{clienteId}}\n}"
+            }
+          }
+        },
+        {
+          "name": "Obtener cuenta por id",
+          "request": {
+            "method": "GET",
+            "url": "{{cuentasUrl}}/cuentas/{{cuentaId}}"
+          }
+        },
+        {
+          "name": "Listar cuentas",
+          "request": {
+            "method": "GET",
+            "url": "{{cuentasUrl}}/cuentas?page=0&size=10"
+          }
+        },
+        {
+          "name": "Actualizar cuenta",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{cuentasUrl}}/cuentas/{{cuentaId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoCuenta\": \"AHORRO\",\n  \"estado\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Crear cuenta con cliente inexistente (422 esperado)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test('Status 422', () => pm.response.to.have.status(422));"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{cuentasUrl}}/cuentas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"999999\",\n  \"tipoCuenta\": \"AHORRO\",\n  \"saldoInicial\": 0,\n  \"estado\": true,\n  \"clienteId\": 999999\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Movimientos",
+      "item": [
+        {
+          "name": "Retiro de 575 (cuenta 478758)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{cuentasUrl}}/movimientos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cuentaId\": {{cuentaId}},\n  \"tipoMovimiento\": \"RETIRO\",\n  \"valor\": 575\n}"
+            }
+          }
+        },
+        {
+          "name": "Deposito de 600",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{cuentasUrl}}/movimientos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cuentaId\": {{cuentaId}},\n  \"tipoMovimiento\": \"DEPOSITO\",\n  \"valor\": 600\n}"
+            }
+          }
+        },
+        {
+          "name": "Retiro que excede saldo (422 - Saldo no disponible)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Mensaje Saldo no disponible', () => {",
+                  "  var body = pm.response.json();",
+                  "  pm.expect(body.message).to.eql('Saldo no disponible');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{cuentasUrl}}/movimientos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cuentaId\": {{cuentaId}},\n  \"tipoMovimiento\": \"RETIRO\",\n  \"valor\": 999999\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Reportes",
+      "item": [
+        {
+          "name": "Estado de cuenta por cliente y rango de fechas",
+          "request": {
+            "method": "GET",
+            "url": "{{cuentasUrl}}/reportes?clienteId={{clienteId}}&fechaInicio=2022-01-01&fechaFin=2030-12-31"
+          }
+        }
+      ]
+    }
+  ]
+}

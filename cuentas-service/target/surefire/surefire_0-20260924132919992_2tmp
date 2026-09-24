@@ -1,0 +1,6 @@
+#surefire_0
+#Thu Sep 24 13:29:20 UTC 2026
+basedir=/build
+failIfNoTests=true
+localRepository=/root/.m2/repository
+test=MovimientoServiceTest,CuentaControllerTest

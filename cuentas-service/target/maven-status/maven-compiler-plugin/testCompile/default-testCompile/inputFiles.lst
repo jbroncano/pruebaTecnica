@@ -1,0 +1,3 @@
+/build/src/test/java/com/prueba/cuentas/controller/CuentaControllerTest.java
+/build/src/test/java/com/prueba/cuentas/integration/CuentaMovimientoIntegrationTest.java
+/build/src/test/java/com/prueba/cuentas/service/MovimientoServiceTest.java
