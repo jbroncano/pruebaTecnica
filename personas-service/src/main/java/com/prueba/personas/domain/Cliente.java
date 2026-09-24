@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,10 +29,6 @@ public class Cliente extends Persona {
 
     @Column(name = "estado", nullable = false)
     private Boolean estado;
-
-    @Version
-    @Column(name = "version")
-    private Long version;
 
     public Long getClienteId() {
         return getId();

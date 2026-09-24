@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,4 +47,8 @@ public class Persona {
 
     @Column(name = "telefono", length = 20)
     private String telefono;
+
+    @Version
+    @Column(name = "version")
+    private Long version;
 }
